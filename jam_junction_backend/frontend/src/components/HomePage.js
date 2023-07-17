@@ -5,6 +5,7 @@ import {BrowserRouter as Router, Routes, Route, Link, Redirect} from 'react-rout
 
 import RoomJoinPage from './RoomJoinPage';
 import CreateRoomPage from './CreateRoomPage';
+import Room from './Room';
 
 const HomePage = () => {
   return (
@@ -13,6 +14,8 @@ const HomePage = () => {
       <Route exact path="/" element={<p>this is this homepage</p>}/>
       <Route path="/join" element={<RoomJoinPage />} />
       <Route path="/create" element={<CreateRoomPage />} />
+      {/* roomCode is dynamic in the URL */}
+      <Route path="/room/:roomCode" element={<Room />} />  
     </Routes>
   </Router>
   )  
