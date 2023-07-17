@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import { useParams } from 'react-router-dom';
 
 const Room = () => {
@@ -14,19 +14,22 @@ const Room = () => {
         fetch('/api/get-room' + '?code=' + roomCode).then((response) => 
             response.json()
         ).then((data) =>{
-            setVotesToSkip();
-            setGuestCanPause();
-            setIsHost();    
+            setVotesToSkip(data.votes_to_skip);
+            setGuestCanPause(data.guest_can_pause);
+            setIsHost(data.is_host);    
         });
     }
-
+    useEffect(() => {
+        getRoomDetails();
+    }, [])
+    
 
     return (
         <div>
             <h3>{roomCode}</h3>
             <p>Votes: {votesToSkip}</p>
-            <p>Guest can Pause: {guestCanPause}</p>
-            <p>is Host: {isHost}</p>
+            <p>Guest can Pause: {guestCanPause.toString()}</p>
+            <p>is Host: {isHost.toString()}</p>
         </div>
     )
 }
