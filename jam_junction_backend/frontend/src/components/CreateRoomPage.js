@@ -5,7 +5,7 @@ import Typography from '@material-ui/core/Typography';
 import TextField from "@material-ui/core/TextField";
 import  FormHelperText  from '@material-ui/core/FormHelperText';
 import  FormControl  from '@material-ui/core/FormControl';
-import {Link, useHistory} from 'react-router-dom';
+import {Link, useNavigate } from 'react-router-dom';
 import Radio from "@material-ui/core/Radio";
 import  RadioGroup  from '@material-ui/core/RadioGroup';
 import  FormControlLabel  from '@material-ui/core/FormControlLabel';
@@ -16,7 +16,7 @@ const CreateRoomPage = () => {
   let defaultVotes = 2;
   const [guestCanPause, setGuestCanPause] = useState(true);
   const [votesToSkip, setVotesToSkip] = useState(defaultVotes);
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const handleVotesChange = (e) => {
     setVotesToSkip(e.target.value);
@@ -37,7 +37,7 @@ const CreateRoomPage = () => {
     };
     fetch('/api/create-room', requestOptions).then((response) =>      //here u can see we are using the backend api
       response.json()
-    ).then((data) => history.push(`/room?code=${data.code}` ));    //getting the response data back
+    ).then((data) => navigate(`/room/${data.code}` ));    //getting the response data back
   }
  
   return (
