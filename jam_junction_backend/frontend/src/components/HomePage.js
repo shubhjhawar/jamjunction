@@ -12,6 +12,7 @@ const HomePage = () => {
 
   const [roomCode, setRoomCode] = useState("");
 
+
   const renderHomePage = () => {
     return (
       <Grid container spacing={3}>
@@ -31,14 +32,16 @@ const HomePage = () => {
     )
   }; 
 
+  const clearRoomCode = () => {
+    setRoomCode(null);
+  }
+
   useEffect(() => {
     const fetchData = async () => {
       fetch('/api/user-in-room')
       .then((response) => response.json())
       .then((data) => {
-        console.log(data.code);
-        setRoomCode(data.code.toString);
-        console.log(roomCode);
+        setRoomCode(data.code);
       })
       .catch((error)=>{
         console.log(error);
@@ -52,11 +55,12 @@ const HomePage = () => {
   return (
   <Router>
     <Routes>
-      <Route exact path="/" element={roomCode ? <Redirect to={`/room/${roomCode}`}/> : renderHomePage()}/>
+      {/* <Route exact path="/" element={roomCode ? <Redirect to={`/room/${roomCode}`}/> : renderHomePage()}/> */}
+      <Route exact path="/" element={renderHomePage()}/>
       <Route path="/join" element={<RoomJoinPage />} />
       <Route path="/create" element={<CreateRoomPage />} />
       {/* roomCode is dynamic in the URL */}
-      <Route path="/room/:roomCode" element={<Room />} />  
+      <Route path="/room/:roomCode" element={<Room leaveRoomCallback={clearRoomCode}/>} />  
     </Routes>
   </Router>
   )  
