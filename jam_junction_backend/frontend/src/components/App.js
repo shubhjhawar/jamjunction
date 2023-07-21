@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {render} from 'react-dom';
+import HomePage from './HomePage';
 
 class App extends Component {
     constructor(props) {
@@ -7,7 +8,11 @@ class App extends Component {
     }
 
     render(){
-        return (<h1>Testing REact Code</h1>)
+        return(
+            <div className="center">
+                <HomePage />
+            </div>
+        );
     }
 }
 
