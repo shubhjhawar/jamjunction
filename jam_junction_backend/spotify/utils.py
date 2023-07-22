@@ -1,9 +1,10 @@
 from .models import SpotifyToken
 from django.utils import timezone
-from requests import Request, post
+from requests import Request, post, put, get
 from datetime import timedelta
 from .credentials import REDIRECT_URI,CLIENT_ID, CLIENT_SECRET
 
+BASE_URL = "https://api.spotify.com/v1/me/"
 
 def get_user_tokens(session_id):
     user_tokens = SpotifyToken.objects.filter(user = session_id)
@@ -56,3 +57,22 @@ def is_spotify_authenticated(session_id):
             refresh_spotify_token(session_id)
         return True
     return False
+
+def execute_spotify_api_request(session_id, endpoint, post_=False, put_=False):
+    tokens = get_user_tokens(session_id)
+    header = {'Content-Type':'application/json', 
+              'Authorization':"Bearer " + tokens.access_token}
+
+    if post_:
+        post(BASE_URL + endpoint, headers=header)
+    
+    if put_:
+        put(BASE_URL + endpoint, headers=header)
+
+    response = get(BASE_URL + endpoint, {}, headers=header)
+
+    try:
+        return response.json()
+    except Exception as e:
+        return {"Error":"Issue with request"}
+
