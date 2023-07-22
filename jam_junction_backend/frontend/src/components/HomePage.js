@@ -1,6 +1,6 @@
 import React, { useState, useEffect} from 'react';
-import { render } from 'react-dom';
-import {BrowserRouter as Router, Routes, Route, Link, Redirect} from 'react-router-dom';
+import { render} from 'react-dom';
+import {BrowserRouter as Router, Routes, Route, Link, Redirect, Navigate} from 'react-router-dom';
 import { Grid, Button, ButtonGroup, Typography } from '@material-ui/core';
 
 
@@ -33,11 +33,10 @@ const HomePage = () => {
   }; 
 
   const clearRoomCode = () => {
-    setRoomCode(null);
+    setRoomCode("");
   }
 
   useEffect(() => {
-    const fetchData = async () => {
       fetch('/api/user-in-room')
       .then((response) => response.json())
       .then((data) => {
@@ -46,8 +45,7 @@ const HomePage = () => {
       .catch((error)=>{
         console.log(error);
       });
-    }
-    fetchData();
+
   }, [])
 
   
@@ -56,11 +54,11 @@ const HomePage = () => {
   <Router>
     <Routes>
       {/* <Route exact path="/" element={roomCode ? <Redirect to={`/room/${roomCode}`}/> : renderHomePage()}/> */}
-      <Route exact path="/" element={renderHomePage()}/>
+      <Route exact path="/" element={roomCode ? <Navigate to={`/room/${roomCode}`}></Navigate> : renderHomePage()}/>
       <Route path="/join" element={<RoomJoinPage />} />
       <Route path="/create" element={<CreateRoomPage />} />
       {/* roomCode is dynamic in the URL */}
-      <Route path="/room/:roomCode" element={<Room leaveRoomCallback={clearRoomCode}/>} />  
+      <Route path="/room/:roomCode" element={<Room leaveRoomCallback={() => clearRoomCode}/>} />  
     </Routes>
   </Router>
   )  

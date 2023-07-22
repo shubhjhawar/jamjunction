@@ -8,9 +8,22 @@ const Room = ({ leaveRoomCallback }) => {
   const [guestCanPause, setGuestCanPause] = useState(false);
   const [isHost, setIsHost] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
+  const [spotifyAuthenticated, setSpotifyAuthenticated] = useState(false);
   const navigate = useNavigate();
 
   const { roomCode } = useParams();
+
+  const authenticateSpotify = (roomCode) => {
+    fetch('/spotify/is-authenticated').then((response) => response.json()).then((data) => {
+      setSpotifyAuthenticated(data.status);
+      if(!data.status)
+      {
+        fetch('/spotify/get-auth-url').then((response) => response.json()).then((data) =>{
+          window.location.replace(data.url);
+        });
+      }
+    });
+  }
 
   const getRoomDetails = () => {
     fetch('/api/get-room' + '?code=' + roomCode)
@@ -29,7 +42,13 @@ const Room = ({ leaveRoomCallback }) => {
   };
 
   useEffect(() => {
-    getRoomDetails();
+    authenticateSpotify();
+  }, [isHost]);
+
+  console.log(spotifyAuthenticated);
+
+  useEffect(() => {
+    getRoomDetails(roomCode);
   }, []);
 
   const leaveButtonPressed = () => {
@@ -39,8 +58,8 @@ const Room = ({ leaveRoomCallback }) => {
     };
 
     fetch('/api/leave-room', requestOptions).then((response) => {
-      leaveRoomCallback();
       navigate('/');
+      leaveRoomCallback();
     });
   };
 
@@ -79,6 +98,8 @@ const Room = ({ leaveRoomCallback }) => {
       </Grid>
     );
   };
+
+
   // this is how you do conditional rendering 
   return showSettings ? renderSettings() : (
     <Grid container spacing={1}>
