@@ -7,6 +7,7 @@ import { Grid, Button, ButtonGroup, Typography } from '@material-ui/core';
 import RoomJoinPage from './RoomJoinPage';
 import CreateRoomPage from './CreateRoomPage';
 import Room from './Room';
+import Info from './Info';
 
 const HomePage = () => {
 
@@ -25,6 +26,7 @@ const HomePage = () => {
         <Grid item xs={12} align="center">
           <ButtonGroup disableElevation variant='contained' color="primary">
             <Button color="primary" to="/join" component={ Link }>Join a Room</Button>
+            <Button color="default" to="/info" component={ Link }>Info</Button>
             <Button color="secondary" to="/create" component={ Link }>Create a Room</Button>
           </ButtonGroup>
         </Grid>
@@ -56,6 +58,7 @@ const HomePage = () => {
       {/* <Route exact path="/" element={roomCode ? <Redirect to={`/room/${roomCode}`}/> : renderHomePage()}/> */}
       <Route exact path="/" element={roomCode ? <Navigate to={`/room/${roomCode}`}></Navigate> : renderHomePage()}/>
       <Route path="/join" element={<RoomJoinPage />} />
+      <Route path="/info" element={<Info />} />
       <Route path="/create" element={<CreateRoomPage />} />
       {/* roomCode is dynamic in the URL */}
       <Route path="/room/:roomCode" element={<Room leaveRoomCallback={clearRoomCode}/>} />  

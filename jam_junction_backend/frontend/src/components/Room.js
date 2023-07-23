@@ -133,6 +133,11 @@ const Room = (props) => {
           Code: {roomCode}
         </Typography>
       </Grid>
+      <Grid item xs={12} align="center">
+         <Typography variant="h6" component="h6">
+           Host: {isHost.toString()}
+         </Typography>
+       </Grid>
       <MusicPlayer {...song}/>
       
       {/* {song} */}
@@ -146,13 +151,9 @@ const Room = (props) => {
         <Typography variant="h6" component="h6">
           Guest can Pause: {guestCanPause.toString()}
         </Typography>
-      </Grid>
+      </Grid> */}
 
-      // <Grid item xs={12} align="center">
-      //   <Typography variant="h6" component="h6">
-      //     Host: {isHost.toString()}
-      //   </Typography>
-      // </Grid> */}
+       
 
       {isHost && renderSettingsButton()}
 
