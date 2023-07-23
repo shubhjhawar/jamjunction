@@ -3,6 +3,7 @@ from rest_framework import generics, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.http import JsonResponse
+from rest_framework.exceptions import NotFound
 
 from .models import Room
 from .serializers import RoomSerializer, CreateRoomSerializer, UpdateRoomSerializer
@@ -102,13 +103,50 @@ class UserInRoomView(APIView):
 class LeaveRoomView(APIView):
     def post(self, request, format=None):
         if 'room_code' in self.request.session:
-            request.session.pop('room_code')
-            host_id = self.request.session_key
+            self.request.session.pop('room_code')
+            host_id = self.request.session.session_key
             room_results = Room.objects.filter(host=host_id)
             if len(room_results) > 0:
                 room = room_results[0]
                 room.delete()
-        return Response({"Message":"Success"}, status=status.HTTP_200_OK)
+
+        return Response({'Message': 'Success'}, status=status.HTTP_200_OK)
+    def post(self, request, format=None):
+        try:
+            # Check if the user has a 'room_code' in their session.
+            if 'room_code' in self.request.session:
+                # Remove the 'room_code' from the session.
+                request.session.pop('room_code')
+
+                # Identify the host (user) of the room using self.request.session_key.
+                host_id = self.request.session.session_key
+
+                # Query the Room model to find any rooms associated with the host.
+                room_results = Room.objects.filter(host=host_id)
+
+                if len(room_results) > 0:
+                    # If a room is found, delete it from the database.
+                    room = room_results[0]
+                    room.delete()
+                else:
+                    # If no room is found for the host, raise a NotFound exception.
+                    raise NotFound("No room found for the host.")
+
+                return Response({"Message": "Success"}, status=status.HTTP_200_OK)
+
+            else:
+                # If the 'room_code' is not present in the session, raise a NotFound exception.
+                raise NotFound("No 'room_code' found in the session.")
+
+        except NotFound as e:
+            # Handle the NotFound exception and return an error response.
+            print(e)
+            return Response({"Error": str(e)}, status=status.HTTP_404_NOT_FOUND)
+
+        except Exception as e:
+            # Handle any other unexpected exceptions and return an error response.
+            print(e)
+            return Response({"Error": "An unexpected error occurred."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 class UpdateRoomView(APIView):

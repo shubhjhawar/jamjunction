@@ -9,8 +9,10 @@ class App extends Component {
 
     render(){
         return(
-            <div className="center">
-                <HomePage />
+            <div class="gradient-background">
+                <div class="center">
+                    <HomePage />
+                </div>
             </div>
         );
     }

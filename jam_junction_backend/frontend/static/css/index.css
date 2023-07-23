@@ -26,3 +26,30 @@ html, body {
     left:50%;
     transform: translate(-50%, -50%);
 }
+
+.gradient-background {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    animation: changeGradient 10s linear infinite;
+  }
+  
+  @keyframes changeGradient {
+    0% {
+      background: linear-gradient(to right, #FF5733, #FFC300);
+    }
+    25% {
+      background: linear-gradient(to right, #FFC300, #33FF57);
+    }
+    50% {
+      background: linear-gradient(to right, #33FF57, #33D3FF);
+    }
+    75% {
+      background: linear-gradient(to right, #33D3FF, #3337FF);
+    }
+    100% {
+      background: linear-gradient(to right, #3337FF, #FF5733);
+    }
+  }
