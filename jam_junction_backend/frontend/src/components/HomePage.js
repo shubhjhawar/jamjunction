@@ -58,7 +58,7 @@ const HomePage = () => {
       <Route path="/join" element={<RoomJoinPage />} />
       <Route path="/create" element={<CreateRoomPage />} />
       {/* roomCode is dynamic in the URL */}
-      <Route path="/room/:roomCode" element={<Room leaveRoomCallback={() => clearRoomCode}/>} />  
+      <Route path="/room/:roomCode" element={<Room leaveRoomCallback={clearRoomCode}/>} />  
     </Routes>
   </Router>
   )  
