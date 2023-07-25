@@ -2,7 +2,7 @@
     "version": 2,
     "builds": [
         {
-            "src":"jam_junction_backend/jam_junction_backend/wsgi.py",
+            "src":"jam_junction_backend/wsgi.py",
             "use":"@vercel/python",
             "config": { "maxLambdaSize":"15mb", "runtime":"python3.8.10" }
         },
@@ -21,7 +21,7 @@
         },
         {
             "src":"/(.*)",
-            "dest":"jam_junction_backend/jam_junction_backend/wsgi.py"
+            "dest":"jam_junction_backend/wsgi.py"
         }
     ]
 }
